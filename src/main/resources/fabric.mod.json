@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "figurines",
+	"version": "${version}",
+	"name": "Spacey Figurines",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Fractalflower"
+	],
+	"license": "GPLv3",
+	"icon": "assets/figurines/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"xyz.lilyflower.figurines.SpaceyFigurines"
+		],
+		"preLaunch": [
+			"xyz.lilyflower.figurines.PrelaunchResourceGenerator"
+		]
+	},
+	"mixins": [
+		"figurines.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.2",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
