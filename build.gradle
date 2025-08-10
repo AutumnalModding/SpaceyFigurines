@@ -11,17 +11,7 @@ base {
 }
 
 repositories {
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = 'GeckoLib'
-				url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-			}
-		}
-		filter {
-			includeGroup('software.bernie.geckolib')
-		}
-	}
+
 }
 
 dependencies {
@@ -32,7 +22,6 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 }
 
 processResources {
