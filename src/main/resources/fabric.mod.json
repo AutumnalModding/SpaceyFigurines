@@ -14,13 +14,13 @@
 		"main": [
 			"xyz.lilyflower.figurines.SpaceyFigurines"
 		],
+		"client": [
+			"xyz.lilyflower.figurines.SpaceyFigurines"
+		],
 		"preLaunch": [
 			"xyz.lilyflower.figurines.PrelaunchResourceGenerator"
 		]
 	},
-	"mixins": [
-		"figurines.mixins.json"
-	],
 	"depends": {
 		"fabricloader": ">=0.17.2",
 		"minecraft": "~1.21.8",

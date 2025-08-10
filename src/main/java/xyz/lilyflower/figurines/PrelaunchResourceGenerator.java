@@ -6,16 +6,13 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
-import net.minecraft.item.Item;
 import net.minecraft.util.Rarity;
 import org.apache.commons.io.FileUtils;
 import xyz.lilyflower.figurines.item.FigurineItem;
@@ -79,12 +76,11 @@ public class PrelaunchResourceGenerator implements PreLaunchEntrypoint {
                 byte[] raw = decoder.decode(parsed.get("texture").getAsString());
                 Files.write(Path.of("resourcepacks/figurines/assets/figurines/textures/item/figurine_" + identifier + ".png"), raw, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 
-                System.out.println("Adding "  + figurine.getName());
                 UNREGISTERED.put("figurine_" + identifier, new FigurineItem.FigurineData(
                         parsed.get("name").getAsString(),
                         parsed.get("description").getAsString(),
                         FigurineItem.Category.valueOf(parsed.get("category").getAsString().toUpperCase(Locale.ROOT)),
-                        0,
+                        parsed.get("number").getAsInt(),
                         Rarity.valueOf(parsed.get("rarity").getAsString().toUpperCase(Locale.ROOT)),
                         text
                 ));
