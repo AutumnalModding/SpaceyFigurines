@@ -90,24 +90,33 @@ public class SpaceyFigurines implements ModInitializer, ClientModInitializer, Pr
 	public void onPreLaunch() {
 		try {
 			FileUtils.deleteDirectory(Path.of("resourcepacks/figurines").toFile());
+		} catch (IOException ignored) {}
+
+		try {
 			Path.of("resourcepacks/figurines/assets/figurines/items").toFile().mkdirs();
 			Path.of("resourcepacks/figurines/assets/figurines/textures/item").toFile().mkdirs();
 			Path.of("resourcepacks/figurines/assets/figurines/models/item").toFile().mkdirs();
 			String PACK_METADATA = """
-                    {
-                      "pack": {
-                        "description": "Spacey Figurines dynamic resource pack",
-                        "pack_format": 81
-                      }
-                    }
-                    """;
+					{
+					  "pack": {
+						"description": "Spacey Figurines dynamic resource pack",
+						"pack_format": 81
+					  }
+					}
+					""";
 			Files.writeString(Path.of("resourcepacks/figurines/pack.mcmeta"), PACK_METADATA);
-			File figurines = Path.of("config/figurines/").toFile();
-			figurines.mkdirs();
+		} catch (IOException fatal) {
+			LOGGER.fatal("Failed to write dynamic reasource pack.");
+			throw new RuntimeException(fatal);
+		}
 
-			File[] possible = figurines.listFiles();
-			Arrays.sort(possible);
-			for (File figurine : possible) {
+		File figurines = Path.of("config/figurines/").toFile();
+		figurines.mkdirs();
+
+		File[] possible = figurines.listFiles();
+		Arrays.sort(possible);
+		for (File figurine : possible) {
+			try {
 				JsonObject parsed = JsonParser.parseString(Files.readString(figurine.toPath())).getAsJsonObject();
 				String identifier = parsed.get("identifier").getAsString();
 
@@ -118,21 +127,21 @@ public class SpaceyFigurines implements ModInitializer, ClientModInitializer, Pr
 				}
 
 				String ITEM_MODEL = """
-                        {
-                          "parent": "minecraft:item/generated",
-                          "textures": {
-                            "layer0": "figurines:item/figurine_""" + identifier + "\"" + """
-                          }
-                        }
-                        """;
+						{
+						  "parent": "minecraft:item/generated",
+						  "textures": {
+							"layer0": "figurines:item/figurine_""" + identifier + "\"" + """
+						  }
+						}
+						""";
 				String SECOND_ITEM_MODEL_FOR_SOME_REASON = """
-                        {
-                          "model": {
-                            "type": "minecraft:model",
-                            "model": "figurines:item/figurine_""" + identifier + "\"" + """
-                          }
-                        }
-                        """;
+						{
+						  "model": {
+							"type": "minecraft:model",
+							"model": "figurines:item/figurine_""" + identifier + "\"" + """
+						  }
+						}
+						""";
 
 				Files.writeString(Path.of("resourcepacks/figurines/assets/figurines/models/item/" + "figurine_" + identifier + ".json"), ITEM_MODEL);
 				Files.writeString(Path.of("resourcepacks/figurines/assets/figurines/items/" + "figurine_" + identifier + ".json"), SECOND_ITEM_MODEL_FOR_SOME_REASON);
@@ -149,9 +158,9 @@ public class SpaceyFigurines implements ModInitializer, ClientModInitializer, Pr
 						Rarity.valueOf(parsed.get("rarity").getAsString().toUpperCase(Locale.ROOT)),
 						text
 				));
+			} catch (IOException | IllegalStateException exception) {
+                LOGGER.error("Error reading figure definition {}. Reason: {}", figurine.getAbsolutePath(), exception.getMessage());
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 
